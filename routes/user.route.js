@@ -793,18 +793,12 @@ router.post("/user/reset-password", userController.resetPassword);
  *         status:
  *           type: string
  *           description: The status of the user account.
- *         referralId:
- *           type: string
- *           description: The referral ID associated with the user.
  *         pendingWithdrawal:
  *           type: number
  *           description: The pending withdrawal amount for the user.
  *         accountBalance:
  *           type: number
  *           description: The current account balance of the user.
- *         uplineId:
- *           type: string
- *           description: The ID of the user's upline.
  *       required:
  *         - username
  *         - email
