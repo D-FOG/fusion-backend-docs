@@ -54,7 +54,9 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-
+app.get('/', (req, res) => {
+  res.send('Welcome to the trust net bank api, check the docs 👉👉👉 !');
+});
 
 // Routes
 app.use('/api', authRoutes); 
