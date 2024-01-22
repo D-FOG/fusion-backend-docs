@@ -43,9 +43,9 @@ const options = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Light Speed Investment Api',
+      title: 'Trust Net Bank Api',
       version: '1.0.0',
-      description: 'lightspeed investment website',
+      description: 'Trust Net Bank website',
     },
   },
   apis: ['./routes/*.js'], 

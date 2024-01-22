@@ -1,7 +1,7 @@
 {
-  "name": "lightspeed-api",
+  "name": "trustbankwebsite-api",
   "version": "1.0.0",
-  "description": "Lightspeed investment website api",
+  "description": "Trust bank website api",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
