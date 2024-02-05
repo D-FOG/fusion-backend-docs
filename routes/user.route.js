@@ -28,12 +28,12 @@ const userController = require("../controllers/user.controller");
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               firstname:
  *                 type: string
- *                 description: The username of the user.
- *               name:
+ *                 description: The firstname of the user.
+ *               lastname:
  *                 type: string
- *                 description: The name of the user.
+ *                 description: The lastname of the user.
  *               email:
  *                 type: string
  *                 format: email
@@ -783,9 +783,12 @@ router.post("/user/reset-password", userController.resetPassword);
  *         userId:
  *           type: string
  *           description: The unique identifier for the user.
- *         username:
+ *         firstname:
  *           type: string
- *           description: The username of the user.
+ *           description: The firstname of the user.
+ *         lastname:
+ *           type: string
+ *           description: The lastname of the user.
  *         email:
  *           type: string
  *           format: email
@@ -800,7 +803,8 @@ router.post("/user/reset-password", userController.resetPassword);
  *           type: number
  *           description: The current account balance of the user.
  *       required:
- *         - username
+ *         - firstname
+ *         - lastname
  *         - email
  *         - status
  */
