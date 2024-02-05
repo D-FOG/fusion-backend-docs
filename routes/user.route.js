@@ -158,7 +158,7 @@ const userController = require("../controllers/user.controller");
  *                 type: string
  *                 description: The token for verification.
  *               otp:
- *                 type: string
+ *                 type: number
  *                 description: The one-time password (OTP) for email verification.
  *     responses:
  *       '201':
