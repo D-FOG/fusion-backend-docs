@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  username: {
+  firstname: {
     type: String,
     required: true,
   },
-  name: {
+  lastname: {
     type: String,
     required: true,
   },
@@ -23,15 +23,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-  },
-  referralId: {
-    type: String,
-    required: true,
-  },
-  uplineId: {
-    type: String,
-    default: 'default',
-
   },
   is_admin: {
     type: Boolean,
@@ -57,19 +48,11 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  activeInvestment: {
-    type: Number,
-    required: true,
-  },
   pendingWithdrawal: {
     type: Number,
     required: true,
   },
   totalDeposit: {
-    type: Number,
-    required: true,
-  },
-  referralEarnings: {
     type: Number,
     required: true,
   },
@@ -81,26 +64,15 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  bitcoinAddress: {
-    type: String,
-    default: 'default',
-    required: true,
-  },
-  usdtAddress: {
-    type: String,
-    default: 'default',
-    required: true,
-  },
-  ethereumAddress: {
-    type: String,
-    default: 'default',
-    required: true,
+  accountNumber: {
+    type: Number,
+    default: 1111111111,
   },
   lastUpdated: {
     type: Date,
     default: Date.now,
   },
-});
+}, {timestamps: true});
 
 const User = mongoose.model('User', userSchema);
 

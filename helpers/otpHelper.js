@@ -4,7 +4,7 @@ const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000);
 };
 
-const sendOTPByEmail = async (email, otp, token, username) => {
+const sendOTPByEmail = async (email, otp, token, firstname) => {
   try {
     const verificationLink = `/verify-email.html?otp=${otp}&token=${token}`;
 
@@ -64,13 +64,13 @@ const sendOTPByEmail = async (email, otp, token, username) => {
         <body>
           <div class="container">
             <div class="email-text">
-              <p>Dear ${username},</p>
+              <p>Dear ${firstname},</p>
               <p>Please click the button below to verify your email address.</p>
               <p><a href="${verificationLink}"><button>Verify Email Address</button></a></p>
               <p>If you did not create an account, no further action is required.</p>
               <p>Best Regards,<br/> Light Speed Investment.</p>
             </div>
-            <div class="footer">&copy; Light Speed Investment. All rights reserved.</div>
+            <div class="footer">&copy; Trust Net Bank. All rights reserved.</div>
         </div>
         </body>
         </html>

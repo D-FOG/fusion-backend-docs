@@ -53,9 +53,9 @@ exports.login = async (req, res) => {
 
 exports.registerUser = async (req, res) => {
   try {
-    const { username, name, email, password, uplineId } = req.body;
+    const { firstname, lastname, email, password } = req.body;
     const userId = generator.generateUniqueID();
-    const referralId = username + generator.generateReferralCode();
+
     const expirationTime = 30 * 60; // 30 minutes in seconds
     const otp = otpHelper.generateOTP();
     const otpcode =otp
@@ -63,40 +63,30 @@ exports.registerUser = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const sameUser = await User.findOne({ username });
-    if (sameUser) {
-      return res.status(400).json({ error: 'Username is already taken' });
-    }
 
     const sameEmail = await User.findOne({ email });
     if (sameEmail) {
       return res.status(400).json({ error: 'An account with this email already exists' });
     }
 
-    await otpHelper.sendOTPByEmail(email, otpcode, token, username);
+    await otpHelper.sendOTPByEmail(email, otpcode, token, firstname);
 
     const newUser = await User.create({
-      username,
-      name,
+      firstname,
+      lastname,
       email,
       password: hashedPassword,
-      referralId,
-      uplineId,
       is_admin: false,
       userId,
       regDate: Date.now(),
       earnings: 0,
       withdrawals: 0,
       accountBalance: 0,
-      activeInvestment: 0,
       pendingWithdrawal: 0,
+      accountNumber: 1111111111,
       totalDeposit: 0,
-      referralEarnings: 0,
       status: 'pending',
       otpcode: otpcode,
-      bitcoinAddress: 'default',
-      usdtAddress: 'default',
-      ethereumAddress: 'default',
     });
 
     res.status(201).json({ message: 'User registered successfully', user: { token } });
@@ -235,14 +225,14 @@ exports.forgotPassword = async (req, res) => {
         <body>
           <div class="container">
             <div class="email-text">
-              <p>Dear ${existingUser.username},</p>
+              <p>Dear ${existingUser.fullname},</p>
               <p>You are receiving this email because we received a password reset request for your account.</p>
               <p><a href="${verificationLink}"><button>Reset Password</button></a></p>
               <p>This password reset link will expire in 60 minutes.</p>
               <p>If you did not request a password reset, no further action is required.</p>
               <p>Best Regards,<br/> Light Speed Investment.</p>
             </div>
-            <div class="footer">&copy; Light Speed Investment.. All rights reserved.</div>
+            <div class="footer">&copy;Trust Net Bank. All rights reserved.</div>
         </div>
         </body>
         </html>
@@ -305,7 +295,7 @@ exports.resetPassword = async (req, res) => {
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Password Reset Successful',
-      html: `Your password has successfully been reset, if you didn't reset your password, please contact support immediately. <br> Light Speed Investment.`
+      html: `Your password has successfully been reset, if you didn't reset your password, please contact support immediately. <br> Trust Net Bank.`
     };
 
     await transporter.sendMail(mailOptions);
