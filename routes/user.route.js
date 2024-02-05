@@ -83,9 +83,9 @@ const userController = require("../controllers/user.controller");
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               email:
  *                 type: string
- *                 description: The username of the user.
+ *                 description: The email of the user.
  *               password:
  *                 type: string
  *                 format: password
