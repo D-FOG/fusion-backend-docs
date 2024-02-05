@@ -326,37 +326,37 @@ router.post("/user/forgot-password", userController.forgotPassword);
 
 router.post("/user/reset-password", userController.resetPassword);
 
-// // user profile and account details
+// user profile and account details
 
-// /**
-//  * Retrieves user profile information.
-//  *
-//  * @swagger
-//  * /api/user/user-profile:
-//  *   get:
-//  *     summary: Get user profile information.
-//  *     description: Retrieves the profile information of the authenticated user.
-//  *     security:
-//  *       - bearerAuth: []
-//  *     responses:
-//  *       '200':
-//  *         description: User profile retrieved successfully.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               description: Details of the user profile.
-//  *       '500':
-//  *         description: Internal server error.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 error:
-//  *                   type: string
-//  *                   description: Message indicating a server error during profile retrieval.
-//  */
+/**
+ * Retrieves user profile information.
+ *
+ * @swagger
+ * /api/user/user-profile:
+ *   get:
+ *     summary: Get user profile information.
+ *     description: Retrieves the profile information of the authenticated user.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: User profile retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               description: Details of the user profile.
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message indicating a server error during profile retrieval.
+ */
 
 // /**
 //  * Edits user profile details.
@@ -455,7 +455,7 @@ router.post("/user/reset-password", userController.resetPassword);
 //  */
 
 
-// router.get("/user/user-profile", authController.verifyToken, authController.checkUser, userController.userProfile);
+router.get("/user/user-profile", authController.verifyToken, authController.checkUser, userController.userProfile);
 
 // router.put("/user/edit-profile", authController.verifyToken, authController.checkUser, userController.editProfile);
 
