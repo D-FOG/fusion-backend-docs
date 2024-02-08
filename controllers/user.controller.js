@@ -138,8 +138,7 @@ exports.verifyEmail = async (req, res) => {
         from: process.env.EMAIL_USER,
         to: email,
         subject: 'Registration successful',
-        html: `Thank you for registering with us. Your account has been successfully verified. Light Spe
-        ed Investment`
+        html: `Thank you for registering with us. Your account has been successfully verified. Trust Net Bank`
       };
 
       await transporter.sendMail(mailOptions);
@@ -229,7 +228,7 @@ exports.forgotPassword = async (req, res) => {
               <p><a href="${verificationLink}"><button>Reset Password</button></a></p>
               <p>This password reset link will expire in 60 minutes.</p>
               <p>If you did not request a password reset, no further action is required.</p>
-              <p>Best Regards,<br/> Light Speed Investment.</p>
+              <p>Best Regards,<br/> Trust Net Bank.</p>
             </div>
             <div class="footer">&copy;Trust Net Bank. All rights reserved.</div>
         </div>

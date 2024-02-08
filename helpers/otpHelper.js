@@ -68,7 +68,7 @@ const sendOTPByEmail = async (email, otp, token, firstname) => {
               <p>Please click the button below to verify your email address.</p>
               <p><a href="${verificationLink}"><button>Verify Email Address</button></a></p>
               <p>If you did not create an account, no further action is required.</p>
-              <p>Best Regards,<br/> Light Speed Investment.</p>
+              <p>Best Regards,<br/> Trust Net Bank.</p>
             </div>
             <div class="footer">&copy; Trust Net Bank. All rights reserved.</div>
         </div>
