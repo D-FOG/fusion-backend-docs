@@ -9,23 +9,23 @@ const sendOTPByEmail = async (email, otp, token, firstname) => {
     const verificationLink = `http://localhost:3000/auth/verification?otp=${otp}&token=${token}`;
 
     const transporter = nodemailer.createTransport({ 
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER, 
-        pass: process.env.EMAIL_PASSWORD
-      }
-
-      // host: process.env.EMAIL_USER, // Replace with your SMTP server
-      // port: 465, // Use the appropriate port (commonly 587 or 465)
-      // secure: true, // true for 465, false for other ports
+      // service: 'gmail',
       // auth: {
-      //   user: process.env.EMAIL_USER,  // Your email address
-      //   pass: process.env.EMAIL_PASSWORD // Your password or app-specific password
+      //   user: process.env.EMAIL_USER, 
+      //   pass: process.env.EMAIL_PASSWORD
       // }
+
+      host: process.env.EMAIL_USER, // Replace with your SMTP server
+      port: 465, // Use the appropriate port (commonly 587 or 465)
+      secure: true, // true for 465, false for other ports
+      auth: {
+        user: process.env.EMAIL_USER,  // Your email address
+        pass: process.env.EMAIL_PASSWORD // Your password or app-specific password
+      }
     });
 
     const mailOptions = {
-      from: `${process.env.EMAIL_USER}`, 
+      from: `Evirtual Bank ${process.env.EMAIL_USER}`, 
       to: email,
       subject: 'Account Verification OTP',
       html: `
@@ -68,9 +68,9 @@ const sendOTPByEmail = async (email, otp, token, firstname) => {
               <p>Please click the button below to verify your email address.</p>
               <p><a href="${verificationLink}"><button>Verify Email Address</button></a></p>
               <p>If you did not create an account, no further action is required.</p>
-              <p>Best Regards,<br/> Trust Net Bank.</p>
+              <p>Best Regards,<br/> Evirtual Bank.</p>
             </div>
-            <div class="footer">&copy; Trust Net Bank. All rights reserved.</div>
+            <div class="footer">&copy; Evirtual Bank. All rights reserved.</div>
         </div>
         </body>
         </html>
