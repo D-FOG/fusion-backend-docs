@@ -15,9 +15,9 @@ const sendOTPByEmail = async (email, otp, token, firstname) => {
       //   pass: process.env.EMAIL_PASSWORD
       // }
 
-      host: process.env.EMAIL_USER, // Replace with your SMTP server
-      port: 465, // Use the appropriate port (commonly 587 or 465)
-      secure: true, // true for 465, false for other ports
+      host: "smtp.zoho.com",
+      secure: true,
+      port: 465,
       auth: {
         user: process.env.EMAIL_USER,  // Your email address
         pass: process.env.EMAIL_PASSWORD // Your password or app-specific password

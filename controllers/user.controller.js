@@ -127,18 +127,20 @@ exports.verifyEmail = async (req, res) => {
       }
 
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASSWORD
-        }
+        host: "smtp.zoho.com",
+      secure: true,
+      port: 465,
+      auth: {
+        user: process.env.EMAIL_USER,  // Your email address
+        pass: process.env.EMAIL_PASSWORD // Your password or app-specific password
+      }
       });
 
       const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: `Evirtual Bank ${process.env.EMAIL_USER}`,
         to: email,
         subject: 'Registration successful',
-        html: `Thank you for registering with us. Your account has been successfully verified. Trust Net Bank`
+        html: `Thank you for registering with us. Your account has been successfully verified. Evirtual Bank.`
       };
 
       await transporter.sendMail(mailOptions);
@@ -175,15 +177,17 @@ exports.forgotPassword = async (req, res) => {
     const verificationLink = `/reset-password.html?otp=${existingUser.otpcode}&token=${token}`;
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: "smtp.zoho.com",
+      secure: true,
+      port: 465,
       auth: {
-        user: process.env.EMAIL_USER, 
-        pass: process.env.EMAIL_PASSWORD
+        user: process.env.EMAIL_USER,  // Your email address
+        pass: process.env.EMAIL_PASSWORD // Your password or app-specific password
       }
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_USER, 
+      from: `Evirtual Bank ${process.env.EMAIL_USER}`,
       to: email,
       subject: 'Reset Password',
       html: `
@@ -228,9 +232,9 @@ exports.forgotPassword = async (req, res) => {
               <p><a href="${verificationLink}"><button>Reset Password</button></a></p>
               <p>This password reset link will expire in 60 minutes.</p>
               <p>If you did not request a password reset, no further action is required.</p>
-              <p>Best Regards,<br/> Trust Net Bank.</p>
+              <p>Best Regards,<br/> Evirtual Bank.</p>
             </div>
-            <div class="footer">&copy;Trust Net Bank. All rights reserved.</div>
+            <div class="footer">&copy;Evirtual Bank. All rights reserved.</div>
         </div>
         </body>
         </html>
@@ -282,18 +286,20 @@ exports.resetPassword = async (req, res) => {
 
     // Send confirmation email to the user
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: "smtp.zoho.com",
+      secure: true,
+      port: 465,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
+        user: process.env.EMAIL_USER,  // Your email address
+        pass: process.env.EMAIL_PASSWORD // Your password or app-specific password
       }
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `Evirtual Bank ${process.env.EMAIL_USER}`,
       to: email,
       subject: 'Password Reset Successful',
-      html: `Your password has successfully been reset, if you didn't reset your password, please contact support immediately. <br> Trust Net Bank.`
+      html: `Your password has successfully been reset, if you didn't reset your password, please contact support immediately. <br> Evirtual Bank.`
     };
 
     await transporter.sendMail(mailOptions);
