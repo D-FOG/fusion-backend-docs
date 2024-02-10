@@ -542,194 +542,194 @@ router.get("/user/user-profile", authController.verifyToken, authController.chec
 // router.get("/user/get-plan/:id", authController.verifyToken, authController.checkUser, userController.getSinglePlan);
 
 
-// // user deposit and payments
+// user deposit and payments
 
-// /**
-//  * Initiates a deposit for a plan.
-//  *
-//  * @swagger
-//  * /api/user/deposit/{id}/{transactionId}:
-//  *   post:
-//  *     summary: Initiate a deposit for a plan.
-//  *     description: Initiates a deposit process for a specific plan using the provided transaction details.
-//  *     parameters:
-//  *       - in: path
-//  *         name: id
-//  *         required: true
-//  *         schema:
-//  *           type: string
-//  *         description: The ID of the plan for the deposit.
-//  *       - in: path
-//  *         name: transactionId
-//  *         required: true
-//  *         schema:
-//  *           type: string
-//  *         description: The transaction ID associated with the deposit.
-//  *     requestBody:
-//  *       required: true
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: object
-//  *             properties:
-//  *               method:
-//  *                 type: string
-//  *                 description: The method used for the deposit.
-//  *     responses:
-//  *       '201':
-//  *         description: Deposit initiated successfully.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 message:
-//  *                   type: string
-//  *                   description: Message confirming successful initiation of deposit.
-//  *                 payment:
-//  *                   $ref: '#/components/schemas/Payment'
-//  *       '200':
-//  *         description: Deposit already completed.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 message:
-//  *                   type: string
-//  *                   description: Message indicating that the deposit has already been done.
-//  *       '401':
-//  *         description: Required information missing for deposit.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 error:
-//  *                   type: string
-//  *                   description: Error message indicating missing information for successful deposit.
-//  *       '500':
-//  *         description: Internal server error.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 error:
-//  *                   type: string
-//  *                   description: Message indicating a server error during deposit initiation.
-//  */
+/**
+ * Initiates a deposit for a plan.
+ *
+ * @swagger
+ * /api/user/deposit/{id}/{transactionId}:
+ *   post:
+ *     summary: Initiate a deposit for a plan.
+ *     description: Initiates a deposit process for a specific plan using the provided transaction details.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the plan for the deposit.
+ *       - in: path
+ *         name: transactionId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The transaction ID associated with the deposit.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               method:
+ *                 type: string
+ *                 description: The method used for the deposit.
+ *     responses:
+ *       '201':
+ *         description: Deposit initiated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Message confirming successful initiation of deposit.
+ *                 payment:
+ *                   $ref: '#/components/schemas/Payment'
+ *       '200':
+ *         description: Deposit already completed.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Message indicating that the deposit has already been done.
+ *       '401':
+ *         description: Required information missing for deposit.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating missing information for successful deposit.
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message indicating a server error during deposit initiation.
+ */
 
-// /**
-//  * Retrieves deposits made by the user.
-//  *
-//  * @swagger
-//  * /api/user/get-deposits:
-//  *   get:
-//  *     summary: Get deposits made by the user.
-//  *     description: Retrieves a list of deposits made by the authenticated user.
-//  *     responses:
-//  *       '200':
-//  *         description: List of user deposits retrieved successfully.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: array
-//  *               items:
-//  *                 $ref: '#/components/schemas/Payment'
-//  *       '500':
-//  *         description: Internal server error.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 error:
-//  *                   type: string
-//  *                   description: Message indicating a server error during deposits retrieval.
-//  */
+/**
+ * Retrieves deposits made by the user.
+ *
+ * @swagger
+ * /api/user/get-deposits:
+ *   get:
+ *     summary: Get deposits made by the user.
+ *     description: Retrieves a list of deposits made by the authenticated user.
+ *     responses:
+ *       '200':
+ *         description: List of user deposits retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Payment'
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message indicating a server error during deposits retrieval.
+ */
 
-// router.post("/user/deposit/:id/:transactionId", authController.verifyToken, authController.checkUser, userController.deposit);
+router.post("/user/deposit/:id/:transactionId", authController.verifyToken, authController.checkUser, userController.deposit);
 
-// router.get("/user/get-deposits", authController.verifyToken, authController.checkUser, userController.getDeposits);
+router.get("/user/get-deposits", authController.verifyToken, authController.checkUser, userController.getDeposits);
 
-// // user withdrawals
+// user withdrawals
 
-// /**
-// * Initiates a withdrawal request.
-// *
-// * @swagger
-// * /api/user/withdraw:
-// *   post:
-// *     summary: Initiate a withdrawal request.
-// *     description: Initiates a withdrawal request for the authenticated user.
-// *     requestBody:
-// *       required: true
-// *       content:
-// *         application/json:
-// *           schema:
-// *             type: object
-// *             properties:
-// *               amount:
-// *                 type: number
-// *                 description: The amount to be withdrawn.
-// *     responses:
-// *       '201':
-// *         description: Withdrawal request placed successfully.
-// *         content:
-// *           application/json:
-// *             schema:
-// *               type: object
-// *               properties:
-// *                 message:
-// *                   type: string
-// *                   description: Message confirming successful placement of the withdrawal request.
-// *                 withdrawal:
-// *                   $ref: '#/components/schemas/Withdrawal'
-// *       '500':
-// *         description: Internal server error.
-// *         content:
-// *           application/json:
-// *             schema:
-// *               type: object
-// *               properties:
-// *                 error:
-// *                   type: string
-// *                   description: Message indicating a server error during withdrawal initiation.
-// */
+/**
+* Initiates a withdrawal request.
+*
+* @swagger
+* /api/user/withdraw:
+*   post:
+*     summary: Initiate a withdrawal request.
+*     description: Initiates a withdrawal request for the authenticated user.
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               amount:
+*                 type: number
+*                 description: The amount to be withdrawn.
+*     responses:
+*       '201':
+*         description: Withdrawal request placed successfully.
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*               properties:
+*                 message:
+*                   type: string
+*                   description: Message confirming successful placement of the withdrawal request.
+*                 withdrawal:
+*                   $ref: '#/components/schemas/Withdrawal'
+*       '500':
+*         description: Internal server error.
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*               properties:
+*                 error:
+*                   type: string
+*                   description: Message indicating a server error during withdrawal initiation.
+*/
 
-// /**
-//  * Retrieves user's withdrawal history.
-//  *
-//  * @swagger
-//  * /api/user/get-withdrawals:
-//  *   get:
-//  *     summary: Get user's withdrawal history.
-//  *     description: Retrieves the withdrawal history of the authenticated user.
-//  *     responses:
-//  *       '200':
-//  *         description: User's withdrawal history retrieved successfully.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: array
-//  *               items:
-//  *                 $ref: '#/components/schemas/Withdrawal'
-//  *       '500':
-//  *         description: Internal server error.
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *               type: object
-//  *               properties:
-//  *                 error:
-//  *                   type: string
-//  *                   description: Message indicating a server error during withdrawal history retrieval.
-//  */
+/**
+ * Retrieves user's withdrawal history.
+ *
+ * @swagger
+ * /api/user/get-withdrawals:
+ *   get:
+ *     summary: Get user's withdrawal history.
+ *     description: Retrieves the withdrawal history of the authenticated user.
+ *     responses:
+ *       '200':
+ *         description: User's withdrawal history retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Withdrawal'
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Message indicating a server error during withdrawal history retrieval.
+ */
 
-// router.post("/user/withdraw", authController.verifyToken, authController.checkUser, userController.withdraw);
+router.post("/user/withdraw", authController.verifyToken, authController.checkUser, userController.withdraw);
 
-// router.get("/user/get-withdrawals", authController.verifyToken, authController.checkUser, userController.getWithdrawals);
+router.get("/user/get-withdrawals", authController.verifyToken, authController.checkUser, userController.getWithdrawals);
 
 // // user referrals
 
@@ -807,6 +807,223 @@ router.get("/user/user-profile", authController.verifyToken, authController.chec
  *         - lastname
  *         - email
  *         - status
+ */
+
+/**
+ * @swagger
+ * /api/user/transfers:
+ *   post:
+ *     summary: Create a new transfer.
+ *     description: Creates a new transfer with the provided details.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Transfer'
+ *     responses:
+ *       '201':
+ *         description: Transfer created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Transfer'
+ *       '400':
+ *         description: Bad request. Missing required fields or invalid data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /api/user/transfers/{id}:
+ *   put:
+ *     summary: Update a transfer.
+ *     description: Updates an existing transfer with the provided details.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the transfer to update.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Transfer'
+ *     responses:
+ *       '200':
+ *         description: Transfer updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Transfer'
+ *       '400':
+ *         description: Bad request. Missing required fields or invalid data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       '404':
+ *         description: Transfer not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+
+/**
+ * @swagger
+ * /api/user/transfers/{id}:
+ *   get:
+ *     summary: Get a single transfer by ID.
+ *     description: Retrieves a single transfer by its ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the transfer to retrieve.
+ *     responses:
+ *       '200':
+ *         description: The requested transfer.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Transfer'
+ *       '404':
+ *         description: Transfer not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+/**
+ * @swagger
+ * /api/user/transfers/user/{userId}:
+ *   get:
+ *     summary: Get transfers for a specific user.
+ *     description: Retrieves a list of transfers associated with a specific user.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user whose transfers are to be retrieved.
+ *     responses:
+ *       '200':
+ *         description: A list of transfers for the specified user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the request was successful.
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Transfer'
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the request was successful.
+ *                 error:
+ *                   type: string
+ *                   description: Description of the error.
+ */
+
+
+router.post('/user/transfers', authController.verifyToken, authController.checkUser, userController.createTransfer);
+router.put('/user/transfers/:id', authController.verifyToken, authController.checkUser, userController.updateTransfer);
+
+router.get('/user/transfers/:id', authController.verifyToken, authController.checkUser, userController.getSingleTransfer);
+router.get('/user/transfers/:userId', authController.verifyToken, authController.checkUser, userController.getUserTransfers);
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Transfer:
+ *       type: object
+ *       required:
+ *         - receipient_name
+ *         - account_number
+ *         - amount
+ *         - userId
+ *         - date
+ *       properties:
+ *         receipient_name:
+ *           type: string
+ *           description: The name of the recipient.
+ *         account_number:
+ *           type: string
+ *           description: The account number of the recipient.
+ *         purpose:
+ *           type: string
+ *           description: The purpose of the transfer.
+ *         city:
+ *           type: string
+ *           description: The city of the recipient.
+ *         street:
+ *           type: string
+ *           description: The street address of the recipient.
+ *         nickname:
+ *           type: string
+ *           description: Nickname for the recipient.
+ *         amount:
+ *           type: number
+ *           description: The amount of money to transfer.
+ *         currency:
+ *           type: string
+ *           description: The currency of the transfer.
+ *         email:
+ *           type: string
+ *           description: The email address of the recipient.
+ *         IBAN:
+ *           type: string
+ *           description: The IBAN number of the recipient.
+ *         swift:
+ *           type: string
+ *           description: The SWIFT code of the recipient.
+ *         status:
+ *           type: string
+ *           description: The status of the transfer (e.g., pending, completed).
+ *         userId:
+ *           type: string
+ *           description: The ID of the user initiating the transfer.
+ *         date:
+ *           type: string
+ *           format: date
+ *           description: The date of the transfer.
+ *     Error:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Description of the error.
  */
 
 

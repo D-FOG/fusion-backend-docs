@@ -628,4 +628,96 @@ router.get("/admin/get-users-payments", authController.verifyToken, authControll
 
 router.put("/admin/approve-payment/:paymentId", authController.verifyToken, authController.checkAdmin, adminController.approveUsersPayment);
 
+
+// transfers
+
+/**
+ * @swagger
+ * /api/admin/transfers:
+ *   get:
+ *     summary: Get all transfers.
+ *     description: Retrieves a list of all transfers.
+ *     responses:
+ *       '200':
+ *         description: A list of transfers.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Transfer'
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+
+router.get('/admin/transfers', authController.verifyToken, authController.checkAdmin, adminController.getAllTransfers);
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Transfer:
+ *       type: object
+ *       required:
+ *         - receipient_name
+ *         - account_number
+ *         - amount
+ *         - userId
+ *         - date
+ *       properties:
+ *         receipient_name:
+ *           type: string
+ *           description: The name of the recipient.
+ *         account_number:
+ *           type: string
+ *           description: The account number of the recipient.
+ *         purpose:
+ *           type: string
+ *           description: The purpose of the transfer.
+ *         city:
+ *           type: string
+ *           description: The city of the recipient.
+ *         street:
+ *           type: string
+ *           description: The street address of the recipient.
+ *         nickname:
+ *           type: string
+ *           description: Nickname for the recipient.
+ *         amount:
+ *           type: number
+ *           description: The amount of money to transfer.
+ *         currency:
+ *           type: string
+ *           description: The currency of the transfer.
+ *         email:
+ *           type: string
+ *           description: The email address of the recipient.
+ *         IBAN:
+ *           type: string
+ *           description: The IBAN number of the recipient.
+ *         swift:
+ *           type: string
+ *           description: The SWIFT code of the recipient.
+ *         status:
+ *           type: string
+ *           description: The status of the transfer (e.g., pending, completed).
+ *         userId:
+ *           type: string
+ *           description: The ID of the user initiating the transfer.
+ *         date:
+ *           type: string
+ *           format: date
+ *           description: The date of the transfer.
+ *     Error:
+ *       type: object
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: Description of the error.
+ */
+
+
 module.exports = router;

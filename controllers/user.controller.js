@@ -529,3 +529,74 @@ async function updateBalances() {
 cron.schedule('0 0 * * *', () => {
   updateBalances();
 });
+
+
+// user transfers
+
+const Transfer = require('../models/Transfer');
+
+// Controller function to create a new transfer
+exports.createTransfer = async (req, res) => {
+  // Check if all required fields are present
+  const requiredFields = ['receipient_name', 'account_number', 'amount', 'userId'];
+  const missingFields = requiredFields.filter(field => !(field in req.body));
+
+  if (missingFields.length > 0) {
+    return res.status(400).json({ success: false, error: `Missing required fields: ${missingFields.join(', ')}` });
+  }
+
+  try {
+    const currentDate = new Date(); // Get the current date
+    const transferData = {
+      ...req.body,
+      status: 'pending',
+      date: currentDate,
+    };
+    
+    const transfer = new Transfer(transferData);
+    await transfer.save();
+    res.status(201).json({ success: true, data: transfer });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// Controller function to update a transfer by ID
+exports.updateTransfer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const transfer = await Transfer.findByIdAndUpdate(id, req.body, { new: true });
+    if (!transfer) {
+      return res.status(404).json({ success: false, error: 'Transfer not found' });
+    }
+    res.status(200).json({ success: true, data: transfer });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+
+
+// Controller function to get a single transfer by ID
+exports.getSingleTransfer = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const transfer = await Transfer.findById(id);
+    if (!transfer) {
+      return res.status(404).json({ success: false, error: 'Transfer not found' });
+    }
+    res.status(200).json({ success: true, data: transfer });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.getUserTransfers = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const transfers = await Transfer.find({ userId });
+    res.status(200).json({ success: true, data: transfers });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};

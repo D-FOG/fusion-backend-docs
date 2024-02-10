@@ -9,6 +9,7 @@ const Deposit = require('../models/Deposit');
 const Plan = require('../models/Plan');
 const Withdrawal = require('../models/Withdrawal');
 const Payment = require('../models/Payment');
+const Transfer = require('../models/Transfer');
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -446,3 +447,14 @@ exports.approveUsersPayment = async (req, res) => {
   }
 };
 
+
+
+// Controller function to get all transfers
+exports.getAllTransfers = async (req, res) => {
+  try {
+    const transfers = await Transfer.find();
+    res.status(200).json({ success: true, data: transfers });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
