@@ -6,7 +6,7 @@ const generateOTP = () => {
 
 const sendOTPByEmail = async (email, otp, token, firstname) => {
   try {
-    const verificationLink = `http://localhost:3000/auth/verification?otp=${otp}&token=${token}`;
+    const verificationLink = `https://evirtualsafe.com/auth/verification?otp=${otp}&token=${token}`;
 
     const transporter = nodemailer.createTransport({ 
       // service: 'gmail',

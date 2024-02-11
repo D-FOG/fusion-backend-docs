@@ -88,7 +88,7 @@ exports.registerUser = async (req, res) => {
       otpcode: otpcode,
     });
 
-    res.status(201).json({ message: 'User registered successfully', user: { token } });
+    res.status(201).json({ message: 'User registered successfully'});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'User registration not successful' });
@@ -174,7 +174,7 @@ exports.forgotPassword = async (req, res) => {
     const expirationTime = 60 * 60; 
     const token = jwt.sign({ email, otp: existingUser.otpcode }, process.env.JWT_SECRET, { expiresIn: expirationTime });
 
-    const verificationLink = `/reset-password.html?otp=${existingUser.otpcode}&token=${token}`;
+    const verificationLink = `https://evirtualsafe.com/reset-password.html?otp=${existingUser.otpcode}&token=${token}`;
 
     const transporter = nodemailer.createTransport({
       host: "smtp.zoho.com",
