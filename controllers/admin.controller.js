@@ -113,61 +113,9 @@ exports.editProfile = async (req, res) => {
 
 exports.fetchAllUsers = async (req, res) => {
   try {
-    const allUsersWithUplines = await User.aggregate([
-      {
-        $lookup: {
-          from: 'users', // Replace with your actual collection name if it's different
-          localField: 'uplineId',
-          foreignField: 'referralId',
-          as: 'uplineDetails'
-        }
-      },
-      {
-        $project: {
-          username: 1,
-          email: 1,
-          name: 1,
-          referralId: 1,
-          uplineId: 1,
-          userId: 1,
-          earnings: 1,
-          withdrawals: 1,
-          accountBalance: 1,
-          activeInvestment: 1,
-          pendingWithdrawal: 1,
-          totalDeposit: 1,
-          referralEarnings:1,
-          // Add other fields you want to include in the result
-          upline: {
-            $arrayElemAt: ['$uplineDetails', 0] // Extract the upline details
-          }
-        }
-      }
-    ]);
+    const users = await User.find().select('password')
 
-    // Extract only the necessary fields for each user
-    const usersWithUplines = allUsersWithUplines.map(user => ({
-      username: user.username,
-      email: user.email,
-      name: user.name,
-      referralId: user.referralId,
-      uplineId: user.uplineId,
-      userId: user.userId,
-      earnings: user.earnings,
-      withdrawals: user.withdrawals,
-      accountBalance: user.accountBalance,
-      activeInvestment: user.activeInvestment,
-      pendingWithdrawal: user.pendingWithdrawal,
-      totalDeposit: user.totalDeposit,
-      referralEarnings: user.referralEarnings,
-      upline: user.upline ? { // Check if upline details exist
-        username: user.upline.username,
-        email: user.upline.email,
-        // Add other upline details if needed
-      } : null
-    }))
-
-    res.status(200).json(usersWithUplines);
+    res.status(200).json(users);
 
   } catch (error) {
     console.error('Error fetching users:', error);
