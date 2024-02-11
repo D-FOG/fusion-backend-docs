@@ -137,10 +137,10 @@ exports.verifyEmail = async (req, res) => {
       });
 
       const mailOptions = {
-        from: `Evirtual Bank ${process.env.EMAIL_USER}`,
+        from: `Evirtual Safe ${process.env.EMAIL_USER}`,
         to: email,
         subject: 'Registration successful',
-        html: `Thank you for registering with us. Your account has been successfully verified. Evirtual Bank.`
+        html: `Thank you for registering with us. Your account has been successfully verified. Evirtual Safe.`
       };
 
       await transporter.sendMail(mailOptions);
@@ -187,7 +187,7 @@ exports.forgotPassword = async (req, res) => {
     });
 
     const mailOptions = {
-      from: `Evirtual Bank ${process.env.EMAIL_USER}`,
+      from: `Evirtual Safe ${process.env.EMAIL_USER}`,
       to: email,
       subject: 'Reset Password',
       html: `
@@ -232,9 +232,9 @@ exports.forgotPassword = async (req, res) => {
               <p><a href="${verificationLink}"><button>Reset Password</button></a></p>
               <p>This password reset link will expire in 60 minutes.</p>
               <p>If you did not request a password reset, no further action is required.</p>
-              <p>Best Regards,<br/> Evirtual Bank.</p>
+              <p>Best Regards,<br/> Evirtual Safe.</p>
             </div>
-            <div class="footer">&copy;Evirtual Bank. All rights reserved.</div>
+            <div class="footer">&copy;Evirtual Safe. All rights reserved.</div>
         </div>
         </body>
         </html>
@@ -296,10 +296,10 @@ exports.resetPassword = async (req, res) => {
     });
 
     const mailOptions = {
-      from: `Evirtual Bank ${process.env.EMAIL_USER}`,
+      from: `Evirtual Safe ${process.env.EMAIL_USER}`,
       to: email,
       subject: 'Password Reset Successful',
-      html: `Your password has successfully been reset, if you didn't reset your password, please contact support immediately. <br> Evirtual Bank.`
+      html: `Your password has successfully been reset, if you didn't reset your password, please contact support immediately. <br> Evirtual Safe.`
     };
 
     await transporter.sendMail(mailOptions);

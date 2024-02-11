@@ -68,7 +68,7 @@ router.put("/admin/edit-profile", authController.verifyToken, authController.che
  * Fetch all users with uplines.
  *
  * @swagger
- * /api/admin/get-users/{userId}:
+ * /api/admin/get-users:
  *   get:
  *     summary: Fetch all users with uplines.
  *     description: Retrieves all users along with their upline details.
