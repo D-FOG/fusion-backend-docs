@@ -1,7 +1,7 @@
 {
-  "name": "trustbankwebsite-api",
+  "name": "evirtualsafe-api",
   "version": "1.0.0",
-  "description": "Trust bank website api",
+  "description": "Evirtual Safe website api",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

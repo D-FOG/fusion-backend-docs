@@ -60,6 +60,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  country: {
+    type: String,
+  },
+  residential_address: {
+    type: String,
+  },
+  state: {
+    type: String,
+  },
+  next_of_kin: {
+    type: String,
+  },
   otpcode: {
     type: Number,
     required: true,

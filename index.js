@@ -43,9 +43,9 @@ const options = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Trust Net Bank Api',
+      title: 'Evirtual Safe Api',
       version: '1.0.0',
-      description: 'Trust Net Bank website',
+      description: 'Evirtual Safe website',
     },
   },
   apis: ['./routes/*.js'], 
@@ -55,7 +55,7 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res) => {
-  res.send('Welcome to the trust net bank api, check the docs 👉👉👉 !');
+  res.send('Welcome to the evirtual safe api, check the docs 👉👉👉 !');
 });
 
 // Routes

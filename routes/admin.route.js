@@ -174,21 +174,15 @@ router.put("/admin/edit-profile", authController.verifyToken, authController.che
  *     UserWithUpline:
  *       type: object
  *       properties:
- *         username:
+ *         firstname:
  *           type: string
  *           description: The username of the user.
  *         email:
  *           type: string
  *           description: The email of the user.
- *         name:
+ *         lastname:
  *           type: string
  *           description: The name of the user.
- *         referralId:
- *           type: string
- *           description: The referral ID of the user.
- *         uplineId:
- *           type: string
- *           description: The ID of the upline user.
  *         userId:
  *           type: string
  *           description: The ID of the user.
@@ -213,15 +207,6 @@ router.put("/admin/edit-profile", authController.verifyToken, authController.che
  *         referralEarnings:
  *           type: number
  *           description: The referral earnings of the user.
- *         upline:
- *           type: object
- *           properties:
- *             username:
- *               type: string
- *               description: The username of the upline user.
- *             email:
- *               type: string
- *               description: The email of the upline user.
  *     User:
  *       type: object
  *       properties:
@@ -294,6 +279,118 @@ router.get("/admin/get-user/:userId",  authController.verifyToken, authControlle
 
 router.put("/admin/update-user/:userId",  authController.verifyToken, authController.checkAdmin, adminController.updateUser);
 
+/**
+ * Deposits money into a user's account.
+ *
+ * @swagger
+ * /api/admin/deposit/{userId}:
+ *   post:
+ *     summary: Deposit money into a user's account.
+ *     description: Deposits a specified amount into the account of the user with the provided userId.
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user account to deposit money into.
+ *     requestBody:
+ *       required: true 
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: The username of the user.
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: The email address of the user.
+ *               amount:
+ *                 type: number
+ *                 description: The amount of money to deposit into the user's account.
+ *     responses:
+ *       '200':
+ *         description: Successfully deposited money into the user's account.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *                 user:
+ *                   type: object
+ *                   description: Details of the user account after the deposit.
+ *       '404':
+ *         description: User not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message indicating that the user was not found.
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message for internal server error.
+ */
+
+/**
+ * Fetches all deposits.
+ *
+ * @swagger
+ * /api/admin/get-deposits:
+ *   get:
+ *     summary: Fetch all deposits.
+ *     description: Retrieves a list of all deposits made.
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved deposits.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   username:
+ *                     type: string
+ *                     description: The username of the user who made the deposit.
+ *                   email:
+ *                     type: string
+ *                     format: email
+ *                     description: The email address of the user who made the deposit.
+ *                   amount:
+ *                     type: number
+ *                     description: The amount of money deposited.
+ *                   date:
+ *                     type: string
+ *                     format: date-time
+ *                     description: The date and time when the deposit was made.
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Error message for internal server error.
+ */
+
 
 router.put("/admin/deposit/:userId",  authController.verifyToken, authController.checkAdmin, adminController.deposit);
 
@@ -301,13 +398,13 @@ router.get("/admin/get-deposits", authController.verifyToken, authController.che
 
  
 
-router.post("/admin/create-plan", authController.verifyToken, authController.checkAdmin, adminController.createPlan);
+// router.post("/admin/create-plan", authController.verifyToken, authController.checkAdmin, adminController.createPlan);
 
-router.get("/admin/get-plans", authController.verifyToken, authController.checkAdmin, adminController.fetchPlans);
+// router.get("/admin/get-plans", authController.verifyToken, authController.checkAdmin, adminController.fetchPlans);
 
-router.put("/admin/update-plan/:id", authController.verifyToken, authController.checkAdmin, adminController.updatePlan);
+// router.put("/admin/update-plan/:id", authController.verifyToken, authController.checkAdmin, adminController.updatePlan);
 
-router.get("/admin/get-plan/:id", authController.verifyToken, authController.checkAdmin, adminController.getSinglePlan);
+// router.get("/admin/get-plan/:id", authController.verifyToken, authController.checkAdmin, adminController.getSinglePlan);
 
 /**
  * Fetch withdrawals.
