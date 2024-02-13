@@ -1,7 +1,7 @@
 {
-  "name": "evirtualsafe-api",
+  "name": "fusion-api",
   "version": "1.0.0",
-  "description": "Evirtual Safe website api",
+  "description": "Fusion website api",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -35,6 +35,5 @@
   "engines": {
     "node": "20.9.0"
   },
-  "author": "King Johney",
-  "license": "MIT"
+  "author": "King Johney"
 }

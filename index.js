@@ -43,9 +43,9 @@ const options = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Evirtual Safe Api',
+      title: 'Fusion Api',
       version: '1.0.0',
-      description: 'Evirtual Safe website',
+      description: 'Fusion website',
     },
   },
   apis: ['./routes/*.js'], 
@@ -55,7 +55,7 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/', (req, res) => {
-  res.send('Welcome to the evirtual safe api, check the docs 👉👉👉 !');
+  res.send('Welcome to the Fusion api, check the docs 👉👉👉 !');
 });
 
 // Routes
