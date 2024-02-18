@@ -1,39 +1,55 @@
+const dotenv = require('dotenv');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const swaggerUi = require('swagger-ui-express');  
+const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const cors = require('cors');
-const path = require('path'); 
-
+const path = require('path');
 
 const authRoutes = require('./routes/auth.route');
 const userRoutes = require('./routes/user.route');
 const adminRoutes = require('./routes/admin.route');
 
-
 dotenv.config(); // Load environment variables from .env file
 
 const app = express();
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const MONGODB_URI = process.env.MONGODB_URI;
-
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+console.log(MONGODB_URI);
+mongoose
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => {
-    console.log("Connected to database")
+    console.log('Connected to database');
   })
-  .catch((err) => {
-    console.error("Error connecting to database:", err);
-  })
+  .catch(err => {
+    console.error('Error connecting to database:', err);
+  });
 
-  app.use(cors());
+const redis = require('./config/redis');
+
+const createRedisConnection = async () => {
+  return new Promise((resolve, reject) => {
+    redis.on('connect', () => {
+      console.log('Connected to redis server');
+      resolve(true);
+    });
+    redis.on('error', error => {
+      console.log('error connecting to redis');
+      reject(error);
+    });
+  });
+};
+
+createRedisConnection();
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -45,10 +61,10 @@ const options = {
     info: {
       title: 'Fusion Api',
       version: '1.0.0',
-      description: 'Fusion website',
-    },
+      description: 'Fusion website'
+    }
   },
-  apis: ['./routes/*.js'], 
+  apis: ['./routes/*.js']
 };
 
 const swaggerSpec = swaggerJsdoc(options);
@@ -59,7 +75,7 @@ app.get('/', (req, res) => {
 });
 
 // Routes
-app.use('/api', authRoutes); 
+app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', adminRoutes);
 

@@ -1,13 +1,10 @@
 const mongoose = require('mongoose');
-
+//create a user schema
 const userSchema = new mongoose.Schema({
-  firstname: {
+  username: {
     type: String,
     required: true,
-  },
-  lastname: {
-    type: String,
-    required: true,
+    unique: true
   },
   email: {
     type: String,
@@ -17,28 +14,42 @@ const userSchema = new mongoose.Schema({
       validator: function (v) {
         return /\S+@\S+\.\S+/.test(v); // Check for valid email format
       },
-      message: props => `${props.value} is not a valid email address!`,
-    },
+      message: props => `${props.value} is not a valid email address!`
+    }
+  },
+  isCompleted: {
+    type: Boolean,
+    required: function () {
+      return this.isGoogleSignin === false;
+    }
   },
   password: {
     type: String,
-    required: true,
+    required: function () {
+      return this.isGoogleSignin === false;
+    }
   },
-  is_admin: {
-    type: Boolean,
-    required: true,
+  date: {
+    type: Date,
+    default: Date.now
   },
-  userId: {
-    type: Number,
-    required: true,
-  },
-  status: {
+  ref: {
     type: String,
-    required: true,
+    required: false
   },
- 
-}, {timestamps: true});
-
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+  referredUsers: {
+    type: Array,
+    default: []
+  },
+  referedBy: {
+    type: String,
+    required: false
+  },
+  isGoogleSignin: {
+    type: Boolean,
+    default: false,
+    required: false
+  }
+});
+//export the user schema
+module.exports = mongoose.model('User', userSchema);
