@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-//create a user schema
+// create user schema
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -49,7 +49,12 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
     required: false
+  },
+  role: {
+    type: String,
+    enum: ['user', 'builder', 'hirer', 'advertiser'], // Add other roles as needed
+    default: 'user' // Default role is 'user'
   }
 });
-//export the user schema
+
 module.exports = mongoose.model('User', userSchema);
