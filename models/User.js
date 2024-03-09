@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
+
 // create user schema
+const experienceSchema = new mongoose.Schema({
+  _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+  jobTitle: { type: String, required: true },
+  company: { type: String, required: true },
+  yearStart: { type: Number, required: true },
+  yearEnd: { type: Number },
+  location: { type: String },
+  description: { type: String }
+});
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -50,6 +61,7 @@ const userSchema = new mongoose.Schema({
     default: false,
     required: false
   },
+
   role: {
     type: String,
     enum: ['user', 'builder', 'hirer', 'advertiser'], // Add other roles as needed
@@ -57,4 +69,49 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+
+  bio: {
+    type: String,
+    required: false
+  },
+  phone: {
+    type: String,
+    required: false
+  },
+  address: {
+    type: String,
+    required: false
+  },
+  experiences : [experienceSchema],
+  mywork: {
+    title: {
+      type: String,
+      required: false
+    },
+    description: {
+      type: String,
+      required: false
+    },
+    content: {
+      type: String,
+      required: false
+    },
+  },
+  socialLinks: {
+    facebook: { type: String },
+    instagram: { type: String },
+    linkedin: { type: String },
+    tiktok: { type: String },
+    github: { type: String },
+    behance: { type: String },
+    dribble: { type: String }
+  },
+  topSkills: {
+    image: { type: String },
+    title: { type: String },
+    description: { type: String },
+    tags: [{ type: String }]
+  }
+}, {timestamps: true});
+//export the user schema
 module.exports = mongoose.model('User', userSchema);
