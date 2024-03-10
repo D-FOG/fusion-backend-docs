@@ -11,9 +11,6 @@ const path = require('path');
 const authRoutes = require('./routes/auth.route');
 const userRoutes = require('./routes/user.route');
 const adminRoutes = require('./routes/admin.route');
-const builderRoutes = require('./routes/builderRoutes');
-const hirerRoutes = require('./routes/hirerRoutes');
-const advertiserRoutes = require('./routes/advertiserRoutes')
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -81,12 +78,6 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', adminRoutes);
-
-// account setup routes
-app.use('/builders', builderRoutes);
-app.use('/hirers', hirerRoutes);
-app.use('/advertisers', advertiserRoutes)
-
 
 const PORT = process.env.PORT || 3000;
 
