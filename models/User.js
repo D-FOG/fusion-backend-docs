@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
+//create a user schema
 
-// create user schema
 const experienceSchema = new mongoose.Schema({
   _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
   jobTitle: { type: String, required: true },
@@ -61,15 +61,6 @@ const userSchema = new mongoose.Schema({
     default: false,
     required: false
   },
-
-  role: {
-    type: String,
-    enum: ['user', 'builder', 'hirer', 'advertiser'], // Add other roles as needed
-    default: 'user' // Default role is 'user'
-  }
-});
-
-
   bio: {
     type: String,
     required: false
