@@ -49,7 +49,7 @@ const createRedisConnection = async () => {
 
 createRedisConnection();
 
-app.use(cors());
+app.use(cors({origin: process.env.ALLOWED_ORIGIN}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

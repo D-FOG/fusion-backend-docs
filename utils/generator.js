@@ -11,4 +11,22 @@ exports.generateUniqueID = () => {
   return id;
 } 
 
-
+exports.generateUsername = async (username1) =>{
+  const checckk = await User.findOne({
+    username: username1
+  });
+  if (!checckk) {
+    return username1.toLowerCase();
+  }
+  while (true) {
+    let randomUsername = `${username1}${
+      Math.floor(Math.random() * 10000) + 1
+    }`;
+    const userWithSameUsername = await User.findOne({
+      username: randomUsername
+    });
+    if (!userWithSameUsername) {
+      return username1.toLowerCase();
+    }
+  }
+}

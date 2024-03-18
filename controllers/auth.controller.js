@@ -2,12 +2,11 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const redis = require('../config/redis');
-
 const Friend = require('../models/Friend');
-
 const short = require('short-uuid');
-
 const { sendVerificationEmail, sendForgerPasswordMail } = require('../utils');
+const { generateUsername } = require('../utils/generator');
+const errorCodes = require('../utils/errorCodes')
 
 exports.register = async (req, res) => {
   const { username, email, password, refd } = req.body;
@@ -71,112 +70,177 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-exports.login = async (req, res) => {
-  //Get the email and password from req.body
-  const { identifier, password } = req.body;
-  try {
-    if (!identifier || !password) {
-      return res.status(400).json({ message: 'Please fill all fields' });
-    }
-    const loweridentifier = identifier.toLowerCase();
-    const valIdentififer = identifier.includes('@') ? 'email' : 'username';
-    if (valIdentififer === 'email') {
-      const emailUser2 = await User.findOne({
-        email: loweridentifier,
-        isCompleted: false,
-        isGoogleSignin: false
-      });
-      if (emailUser2) {
-        return res.status(400).json({ message: 'Verify your account' });
-      }
-      const identifierUser = await User.findOne({ email: loweridentifier });
-      if (!identifierUser) {
-        return res
-          .status(401)
-          .json({ message: 'Invalid identifier or password' });
-      }
-      const newPassword = await bcrypt.compare(
-        password,
-        identifierUser.password
-      );
-      if (!newPassword) {
-        return res
-          .status(401)
-          .json({ message: 'Invalid identifier or password' });
-      }
-      const {
-        username: newUsername,
-        email: email,
-        date,
-        ref,
-        referredUsers
-      } = identifierUser;
-      const authToken = jwt.sign({ identifier }, process.env.SECRET_KEY, {
-        expiresIn: '24hr'
-      });
-      return res.status(200).json({
-        message: 'Logged in successfully',
-        result: {
-          username: newUsername,
-          email: email,
-          date,
-          authToken,
-          ref,
-          referredUsers
-        }
-      });
-    }
-    if (valIdentififer === 'username') {
-      const user2 = await User.findOne({
-        username: loweridentifier,
-        isCompleted: false,
-        isGoogleSignin: false
-      });
 
-      if (user2) {
-        return res.status(400).json({ message: 'Verify your account' });
-      }
-      const identifierUser = await User.findOne({ username: loweridentifier });
-      if (!identifierUser) {
-        return res
-          .status(401)
-          .json({ message: 'Invalid username or password' });
-      }
-      const newPassword = await bcrypt.compare(
-        password,
-        identifierUser.password
-      );
-      if (!newPassword) {
-        return res
-          .status(401)
-          .json({ message: 'Invalid username or password' });
-      }
-      const {
+exports.login = async (req, res) => {
+  try {
+    const {identifier, password} = req.body
+    if (!identifier || !password) {
+      return res.status(422).json({ message: 'Identifier and password required' });
+    }
+    const valIdentififer = identifier.includes('@') ? 'email' : 'username';
+    const query = {};
+    if(valIdentififer === 'email') query.email = identifier
+    else query.username = identifier
+
+    const user = await User.findOne(query)
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: 'Invalid identifier or password' });
+    }
+    if(!user.isCompleted && !user.isGoogleSignin) {
+      return res.status(401).json({ message: 'Verify your account', code: errorCodes.auth.verifyOTP });
+    }
+
+    const newPassword = await bcrypt.compare(
+      password,
+      user.password
+    );
+    if (!newPassword) {
+      return res
+        .status(401)
+        .json({ message: 'Invalid identifier or password' });
+    }
+
+    const {
+      _id,
+      username: newUsername,
+      email: email,
+      date,
+      ref,
+      referredUsers
+    } = user;
+    const authToken = jwt.sign({ id:_id }, process.env.SECRET_KEY, {
+      expiresIn: '24hr'
+    });
+    return res.status(200).json({
+      message: 'Logged in successfully',
+      result: {
         username: newUsername,
         email: email,
         date,
+        authToken,
         ref,
         referredUsers
-      } = identifierUser;
-      const authToken = jwt.sign({ identifier }, process.env.SECRET_KEY, {
-        expiresIn: '24hr'
-      });
-      return res.status(200).json({
-        message: 'Logged in successfully',
-        result: {
-          username: newUsername,
-          email: email,
-          date,
-          OTPToken: authToken,
-          ref,
-          referredUsers
-        }
-      });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+      }
+    });
+  }catch(err) {
+    res.status(500).json({ message: 'Internal server error' });
   }
-};
+}
+
+// exports.login = async (req, res) => {
+//   //Get the email and password from req.body
+//   console.time('login')
+//   const { identifier, password } = req.body;
+//   try {
+//     if (!identifier || !password) {
+//       return res.status(400).json({ message: 'Please fill all fields' });
+//     }
+//     const loweridentifier = identifier.toLowerCase();
+//     const valIdentififer = identifier.includes('@') ? 'email' : 'username';
+//     if (valIdentififer === 'email') {
+//       const emailUser2 = await User.findOne({
+//         email: loweridentifier,
+//         isCompleted: false,
+//         isGoogleSignin: false
+//       });
+//       if (emailUser2) {
+//         return res.status(401).json({ message: 'Verify your account', code: errorCodes.auth.verifyOTP });
+//       }
+//       const identifierUser = await User.findOne({ email: loweridentifier });
+//       if (!identifierUser) {
+//         return res
+//           .status(401)
+//           .json({ message: 'Invalid identifier or password' });
+//       }
+//       const newPassword = await bcrypt.compare(
+//         password,
+//         identifierUser.password
+//       );
+//       if (!newPassword) {
+//         return res
+//           .status(401)
+//           .json({ message: 'Invalid identifier or password' });
+//       }
+//       const {
+//         _id,
+//         username: newUsername,
+//         email: email,
+//         date,
+//         ref,
+//         referredUsers
+//       } = identifierUser;
+//       const authToken = jwt.sign({ id:_id }, process.env.SECRET_KEY, {
+//         expiresIn: '24hr'
+//       });
+//       console.timeEnd('login')
+//       return res.status(200).json({
+//         message: 'Logged in successfully',
+//         result: {
+//           username: newUsername,
+//           email: email,
+//           date,
+//           authToken,
+//           ref,
+//           referredUsers
+//         }
+//       });
+//     }
+//     if (valIdentififer === 'username') {
+//       const user2 = await User.findOne({
+//         username: loweridentifier,
+//         isCompleted: false,
+//         isGoogleSignin: false
+//       });
+
+//       if (user2) {
+//         return res.status(400).json({ message: 'Verify your account' });
+//       }
+//       const identifierUser = await User.findOne({ username: loweridentifier });
+//       if (!identifierUser) {
+//         return res
+//           .status(401)
+//           .json({ message: 'Invalid username or password' });
+//       }
+//       const newPassword = await bcrypt.compare(
+//         password,
+//         identifierUser.password
+//       );
+//       if (!newPassword) {
+//         return res
+//           .status(401)
+//           .json({ message: 'Invalid username or password' });
+//       }
+//       const {
+//         _id,
+//         username: newUsername,
+//         email: email,
+//         date,
+//         ref,
+//         referredUsers
+//       } = identifierUser;
+//       const authToken = jwt.sign({ id:_id }, process.env.SECRET_KEY, {
+//         expiresIn: '24hr'
+//       });
+//       console.timeEnd('login')
+//       return res.status(200).json({
+//         message: 'Logged in successfully',
+//         result: {
+//           username: newUsername,
+//           email: email,
+//           date,
+//           OTPToken: authToken,
+//           ref,
+//           referredUsers
+//         }
+//       });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
 exports.email = async (req, res) => {
   const { email } = req.body;
   try {
@@ -205,6 +269,7 @@ exports.email = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 exports.verifyOtp = async (req, res) => {
   const { OTP, OTPToken, email } = req.body;
   if (!OTP || !OTPToken || !email) {
@@ -246,6 +311,7 @@ exports.verifyOtp = async (req, res) => {
     }
   });
 };
+
 exports.getUser = async (req, res) => {
   const { authToken } = req.body;
   jwt.verify(authToken, process.env.SECRET_KEY, async (err, { identifier }) => {
@@ -288,6 +354,7 @@ exports.getUser = async (req, res) => {
     }
   });
 };
+
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
@@ -318,6 +385,7 @@ exports.forgotPassword = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
 exports.resetPassword = async (req, res) => {
   const { urlcode, password } = req.body;
 
@@ -381,8 +449,6 @@ exports.verifyurlcode = async (req, res) => {
   }
   return res.status(200).json({ message: 'Valid url' });
 };
-const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client();
 
 exports.signinWithGoogle = async (req, res) => {
   const { idToken } = req.body;
@@ -433,25 +499,7 @@ exports.signinWithGoogle = async (req, res) => {
         }
       });
     }
-    async function generateUsername(username1) {
-      const checckk = await User.findOne({
-        username: username1
-      });
-      if (!checckk) {
-        return username1.toLowerCase();
-      }
-      while (true) {
-        let randomUsername = `${username1}${
-          Math.floor(Math.random() * 10000) + 1
-        }`;
-        const userWithSameUsername = await User.findOne({
-          username: randomUsername
-        });
-        if (!userWithSameUsername) {
-          return username1.toLowerCase();
-        }
-      }
-    }
+    
     let usernameNew = username || lowerEmail.split('@')[0];
     const usernameFinal = await generateUsername(usernameNew);
     const newUser = await User.create({
@@ -481,3 +529,17 @@ exports.signinWithGoogle = async (req, res) => {
       .json({ message: 'An error occured, please try again later' });
   });
 };
+
+exports.checkUsername = async (req, res) => {
+  try {
+    const {username} = req.body
+    if(!username) return res.status(422).json({message: 'Username should be provided'})
+
+    const user = await User.findOne({username})
+    if(user) return res.status(409).json({message: 'Username already exists'})  
+    
+    return res.status(200).json({message: 'ok'})
+  }catch(err) {
+    res.status(500).json('Internal server error')
+  }
+}
