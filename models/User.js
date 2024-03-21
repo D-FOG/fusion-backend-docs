@@ -15,14 +15,12 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
-    lowercase: true
+    unique: true
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    lowercase: true,
     validate: {
       validator: function (v) {
         return /\S+@\S+\.\S+/.test(v); // Check for valid email format

@@ -1,5 +1,6 @@
 const express = require('express');
-const router = express.Router();
+var router = express.Router();
+
 const {
   register,
   login,
@@ -9,8 +10,7 @@ const {
   forgotPassword,
   resetPassword,
   verifyurlcode,
-  signinWithGoogle,
-  checkUsername
+  signinWithGoogle
 } = require('../controllers/auth.controller');
 const { friendRequest } = require('../controllers/friend.controller');
 
@@ -18,7 +18,6 @@ router.route('/register').post(register);
 router.route('/login').post(login);
 router.route('/sign-with-google').post(signinWithGoogle);
 router.route('/email').post(email);
-router.route('/check-username').post(checkUsername);
 router.route('/verifyotp').post(verifyOtp);
 router.route('/getuser').post(getUser);
 router.route('/request').post(friendRequest);
