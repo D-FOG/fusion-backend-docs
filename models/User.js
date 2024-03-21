@@ -74,7 +74,7 @@ const userSchema = new mongoose.Schema({
   },
   
   subscriptionStatus: {
-    type: String, // Can be 'successful', 'declined', 'abandoned', etc.
+    type: String, // Can either be 'successful', 'declined', 'abandoned', etc.
     required: false
   },
 

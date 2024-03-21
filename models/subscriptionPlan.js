@@ -1,4 +1,4 @@
-// models/transactionModel.js
+// subscription plan model
 
 const mongoose = require('mongoose');
 

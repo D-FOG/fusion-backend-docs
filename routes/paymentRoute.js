@@ -10,7 +10,7 @@ router.post('/pay', paymentController.initiatePayment);
 // Route to handle payment callback
 router.post('/pay/callback', paymentController.paymentCallback);
 
-// GET route for handling payment callback (optional)
+// GET route for handling payment callback (optional route)
 router.get('/pay/callback', paymentController.paymentCallbackGet);
 
 

@@ -64,8 +64,7 @@ exports.initiatePayment = async (req, res) => {
       firstName: sharedFirstname,
       lastName: sharedLastname,
       reference: `${sharedFirstname}-${sharedLastname}-${Date.now()}`, // Generate unique reference
-      callback_url: `http://localhost:8000/user/pay/callback`
-      //callback_url: `${req.protocol}://${req.get('host')}/api/payment/pay/callback`, // Callback URL
+      callback_url: `http://localhost:8000/user/pay/callback` // Callback URL
     };
 
     // Make API call to Paystack to initialize payment

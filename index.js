@@ -90,7 +90,7 @@ app.use('/builders', builderRoutes);
 app.use('/hirers', hirerRoutes);
 app.use('/advertisers', advertiserRoutes);
 
-//payment route
+//user payment route
 app.use('/user', paymentRoute);
 
 
