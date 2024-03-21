@@ -61,6 +61,23 @@ const userSchema = new mongoose.Schema({
     default: false,
     required: false
   },
+
+  role: {
+    type: String,
+    enum: ['user', 'builder', 'hirer', 'advertiser'], // Add other roles as needed
+    default: 'user' // Default role is 'user'
+  }, 
+
+  subscriptionPlan: {
+    type: String, // Can be 'Basic', 'Social Media Influencer', 'Fired and Crypto', etc.
+    required: false
+  },
+  
+  subscriptionStatus: {
+    type: String, // Can either be 'successful', 'declined', 'abandoned', etc.
+    required: false
+  },
+
   bio: {
     type: String,
     required: false

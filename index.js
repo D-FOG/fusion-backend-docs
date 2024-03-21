@@ -11,11 +11,17 @@ const path = require('path');
 const authRoutes = require('./routes/auth.route');
 const userRoutes = require('./routes/user.route');
 const adminRoutes = require('./routes/admin.route');
+const builderRoutes = require('./routes/builderRoutes');
+const hirerRoutes = require('./routes/hirerRoutes');
+const advertiserRoutes = require('./routes/advertiserRoutes');
+const paymentRoute = require('./routes/paymentRoute');
 
 dotenv.config(); // Load environment variables from .env file
 
-const app = express();
+const paystack = require('paystack')(process.env.Test_Secret_Key_Paystack);
 
+const app = express();
+app.use(bodyParser.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -78,6 +84,15 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', adminRoutes);
+
+// account setup routes
+app.use('/builders', builderRoutes);
+app.use('/hirers', hirerRoutes);
+app.use('/advertisers', advertiserRoutes);
+
+//user payment route
+app.use('/user', paymentRoute);
+
 
 const PORT = process.env.PORT || 3000;
 
