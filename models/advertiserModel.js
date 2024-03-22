@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const serviceSchema = new mongoose.Schema({
   serviceTitle: { type: String, },
   serviceDescription: { type: String, },
-  serviceImage: { type: String, } // Assuming image is a URL, adjust as needed
+  serviceImage: { type: String, }, // Assuming image is a URL, adjust as needed
+  dateAdded: { type: Date, default: Date.now }
 });
 
 const advertiserSchema = new mongoose.Schema({
@@ -35,7 +36,8 @@ const advertiserSchema = new mongoose.Schema({
     businessTitle: { type: String, },
     businessDescription: { type: String, }
   },
-  services: [serviceSchema]
+  services: [serviceSchema],
+  createdAt: { type: Date, default: Date.now }
 });
 
 const Advertiser = mongoose.model('Advertiser', advertiserSchema);

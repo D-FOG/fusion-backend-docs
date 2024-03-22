@@ -29,7 +29,8 @@ const builderSchema = new mongoose.Schema({
       state: { type: String },
       city: { type: String }
     }
-  }
+  },
+  createdAt: { type: Date, default: Date.now }
 });
 
 const Builder = mongoose.model('Builder', builderSchema);
