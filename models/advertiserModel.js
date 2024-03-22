@@ -8,6 +8,11 @@ const serviceSchema = new mongoose.Schema({
 });
 
 const advertiserSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   identity: {
     profilePicture: {
       data: Buffer,
