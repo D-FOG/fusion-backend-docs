@@ -1,6 +1,17 @@
 // models/hirerModel.js
 const mongoose = require('mongoose');
 
+const jobPostingSchema = new mongoose.Schema({
+  jobTitle: { type: String, },
+  jobCategory: { type: String, },
+  jobDescription: { type: String, },
+  projectType: { type: String, },
+  tags: [{ type: String }],
+  jobLocation: { type: String, },
+  budget: { type: Number, },
+  dateAdded: { type: Date, default: Date.now }
+});
+
 const hirerSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -25,15 +36,8 @@ const hirerSchema = new mongoose.Schema({
       city: { type: String, }
     }
   },
-  jobPosting: {
-    jobTitle: { type: String, },
-    jobCategory: { type: String, },
-    jobDescription: { type: String, },
-    projectType: { type: String, },
-    tags: [{ type: String }],
-    jobLocation: { type: String, },
-    budget: { type: Number, }
-  }
+  jobPostings: [jobPostingSchema],
+  createdAt: { type: Date, default: Date.now }
 });
 
 const Hirer = mongoose.model('Hirer', hirerSchema);

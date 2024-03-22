@@ -38,22 +38,22 @@ mongoose
     console.error('Error connecting to database:', err);
   });
 
-const redis = require('./config/redis');
+// const redis = require('./config/redis');
 
-const createRedisConnection = async () => {
-  return new Promise((resolve, reject) => {
-    redis.on('connect', () => {
-      console.log('Connected to redis server');
-      resolve(true);
-    });
-    redis.on('error', error => {
-      console.log('error connecting to redis');
-      reject(error);
-    });
-  });
-};
+// const createRedisConnection = async () => {
+//   return new Promise((resolve, reject) => {
+//     redis.on('connect', () => {
+//       console.log('Connected to redis server');
+//       resolve(true);
+//     });
+//     redis.on('error', error => {
+//       console.log('error connecting to redis');
+//       reject(error);
+//     });
+//   });
+// };
 
-createRedisConnection();
+// createRedisConnection();
 
 app.use(cors());
 

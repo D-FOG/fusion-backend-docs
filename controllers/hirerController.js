@@ -61,7 +61,7 @@ const createHirer = async (req, res) => {
             contentType: profilePictureContentType,
           } : undefined,
         },
-        jobPosting: req.body.jobPosting
+        jobPostings: req.body.jobPostings
       };
 
       const newHirer = await hirerService.createHirer(hirerData);
