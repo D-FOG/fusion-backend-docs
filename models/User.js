@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema({
       return this.isGoogleSignin === false;
     }
   },
+  isCompletedProfile: {
+    type: Boolean,
+    default: false,
+  },
   password: {
     type: String,
     required: function () {

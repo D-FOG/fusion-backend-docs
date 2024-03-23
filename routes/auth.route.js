@@ -10,10 +10,12 @@ const {
   forgotPassword,
   resetPassword,
   verifyurlcode,
-  signinWithGoogle
+  signinWithGoogle,
+  checkUsername
 } = require('../controllers/auth.controller');
 const { friendRequest } = require('../controllers/friend.controller');
 
+router.route('/check-username').post(checkUsername);
 router.route('/register').post(register);
 router.route('/login').post(login);
 router.route('/sign-with-google').post(signinWithGoogle);

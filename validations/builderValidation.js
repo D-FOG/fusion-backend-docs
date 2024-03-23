@@ -11,23 +11,20 @@ const skillSchema = Joi.array().items(
 )
   
 const identitySchema = Joi.object({
-  profilePicture: Joi.object({
-    data: Joi.binary(),
-    contentType: Joi.string(),
-  }),
-  firstName: Joi.string(),
-  lastName: Joi.string(),
-  email: Joi.string().email(),
-  phoneNumber: Joi.string(),
-  description: Joi.string(),
-  occupation: Joi.string(),
-  gender: Joi.string(),
-  birthday: Joi.string(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phoneNumber: Joi.string().required(),
+  description: Joi.string().required(),
+  occupation: Joi.string().required(),
+  gender: Joi.string().required(),
+  birthday: Joi.string().required(),
   address: Joi.object({
     state: Joi.string(),
     city: Joi.string()
-  })
+  }).required()
 });
+
 module.exports = {
   // Validation schema
   skillSchema,

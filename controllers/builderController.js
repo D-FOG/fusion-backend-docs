@@ -4,8 +4,20 @@ const {skillSchema, identitySchema} = require('../validations/builderValidation'
 const Builder = require('../models/builderModel');
 const User = require('../models/User');
 const multer = require('multer');
+const { uploadObject } = require('../utils/s3');
 
-const upload = multer();
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg') {
+    cb(null, true); // Accept the file
+  } else {
+    cb(new Error('Invalid image format. Allowed formats are .jpeg and .png'), false); // Reject the file
+  }
+};
+ 
+const upload = multer({  
+  fileFilter, 
+  limits: {fileSize: 1024 * 1024 * 2} // 2MB
+});
 // Define your builder controller functions here
 const createBuilder = async (req, res) => {
   try {
@@ -13,6 +25,22 @@ const createBuilder = async (req, res) => {
     upload.any()(req, res, async (err) => {
       if (err) {
         return res.status(400).json({ error: 'File upload error', details: err.message });
+      }
+
+      if (req.body.identity) {
+        try {
+          req.body.identity = JSON.parse(req.body.identity)
+        }catch(err) {
+          return res.status(422).json({message: 'identity should be a JSON array'})
+        }
+      }
+
+      if (req.body.skills) {
+        try {
+          req.body.skills = JSON.parse(req.body.skills)
+        }catch(err) {
+          return res.status(422).json({message: 'skills should be a JSON array'})
+        }
       }
 
       // Validate request data
@@ -42,10 +70,8 @@ const createBuilder = async (req, res) => {
 
       // Access uploaded files via req.files
       let profilePictureData;
-      let profilePictureContentType;
       if (req.files && req.files.length > 0) {
-        profilePictureData = req.files[0].buffer;
-        profilePictureContentType = req.files[0].mimetype;
+        profilePictureData = await uploadObject(req.files[0])
       }
 
       const builderData = {
@@ -55,8 +81,8 @@ const createBuilder = async (req, res) => {
           ...req.body.identity,
           // Add profilePicture field if available
           profilePicture: profilePictureData ? {
-            data: profilePictureData,
-            contentType: profilePictureContentType,
+            url: profilePictureData.url,
+            name: profilePictureData.name,
           } : undefined,
         },
       };
@@ -64,7 +90,7 @@ const createBuilder = async (req, res) => {
       const newBuilder = await builderService.createBuilder(builderData);
       
       // Update user's role to "builder"
-      await User.findByIdAndUpdate(user._id, { role: 'builder' });
+      await User.findByIdAndUpdate(user._id, { role: 'builder', isCompletedProfile: true });
 
       res.status(201).json(newBuilder);
     });

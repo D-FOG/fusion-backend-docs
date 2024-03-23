@@ -4,7 +4,10 @@ const mongoose = require('mongoose');
 const serviceSchema = new mongoose.Schema({
   serviceTitle: { type: String, },
   serviceDescription: { type: String, },
-  serviceImage: { type: String, }, // Assuming image is a URL, adjust as needed
+  serviceImage: {
+    url: String,
+    name: String,
+  }, // Assuming image is a URL, adjust as needed
   dateAdded: { type: Date, default: Date.now }
 });
 
@@ -16,8 +19,8 @@ const advertiserSchema = new mongoose.Schema({
   },
   identity: {
     profilePicture: {
-      data: Buffer,
-      contentType: String,
+      url: String,
+      name: String,
     },
     firstName: { type: String, },
     lastName: { type: String, },

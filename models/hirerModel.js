@@ -20,8 +20,8 @@ const hirerSchema = new mongoose.Schema({
   },
   identity: {
     profilePicture: {
-      data: Buffer,
-      contentType: String,
+      url: String,
+      name: String,
     },
     firstName: { type: String, },
     lastName: { type: String, },

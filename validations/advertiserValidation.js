@@ -2,22 +2,18 @@
 const Joi = require('joi');
 
 const identitySchema = Joi.object({
-  profilePicture: Joi.object({
-    data: Joi.binary(),
-    contentType: Joi.string(),
-  }),
-  firstName: Joi.string(),
-  lastName: Joi.string(),
-  email: Joi.string().email(),
-  phoneNumber: Joi.string(),
-  description: Joi.string(),
-  occupation: Joi.string(),
-  gender: Joi.string(),
-  birthday: Joi.string(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phoneNumber: Joi.string().required(),
+  description: Joi.string().required(),
+  occupation: Joi.string().required(),
+  gender: Joi.string().required(),
+  birthday: Joi.string().required(),
   address: Joi.object({
     state: Joi.string(),
     city: Joi.string()
-  })
+  }).required()
 });
 
 const businessDescriptionSchema = Joi.object({
@@ -27,9 +23,9 @@ const businessDescriptionSchema = Joi.object({
 
 const serviceSchema = Joi.array().items(
     Joi.object({
-        serviceTitle: Joi.string(),
-        serviceDescription: Joi.string(),
-        serviceImage: Joi.string() // Assuming image is a URL, adjust as needed
+        imageName: Joi.string(),
+        serviceTitle: Joi.string().required('serviceTitle is required'),
+        serviceDescription: Joi.string().required('serviceDescription is required'),
     })
 );
 
