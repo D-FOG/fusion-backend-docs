@@ -4,23 +4,61 @@ const { identitySchema, businessDescriptionSchema, serviceSchema } = require('..
 const Advertiser = require('../models/advertiserModel');
 const User = require('../models/User');
 const multer = require('multer');
+const { uploadObject } = require('../utils/s3');
 
-const upload = multer();
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true); // Accept the file
+  } else {
+    cb(new Error('Invalid image format. Allowed formats are .jpeg and .png'), false); // Reject the file
+  }
+};
+ 
+const upload = multer({  
+  fileFilter, 
+  limits: {fileSize: 1024 * 1024 * 2} // 2MB
+});
 
 
 const createAdvertiser = async (req, res) => {
   try {
     // Use multer to handle form-data
-    upload.any()(req, res, async (err) => {
+    upload.fields([{ name: 'profilePicture', maxCount: 1 }, { name: 'serviceImages'}])
+    (req, res, async (err) => {
       if (err) {
         return res.status(400).json({ error: 'File upload error', details: err.message });
       }
+      
+      if (req.body.identity) {
+        try {
+          req.body.identity = JSON.parse(req.body.identity)
+        }catch(err) {
+          return res.status(422).json({message: 'identity should be a JSON array'})
+        }
+      }
 
+      if (req.body.businessDescription) {
+        try {
+          req.body.businessDescription = JSON.parse(req.body.businessDescription)
+        }catch(err) {
+          return res.status(422).json({message: 'businessDescription should be a JSON array'})
+        }
+      }
+
+      if (req.body.services) {
+        try {
+          req.body.services = JSON.parse(req.body.services)
+        }catch(err) {
+          return res.status(422).json({message: 'services should be a JSON array'})
+        }
+      }
+
+      let servicesValidation;
       const identityValidation = identitySchema.validate(req.body.identity);
       const businessDescriptionValidation = businessDescriptionSchema.validate(req.body.businessDescription);
-      const servicesValidation = serviceSchema.validate(req.body.services);
+      if(req.body?.services?.length) servicesValidation = serviceSchema.validate(req.body.services);
   
-      if (identityValidation.error || businessDescriptionValidation.error || servicesValidation.error) {
+      if (identityValidation.error || businessDescriptionValidation.error || servicesValidation?.error) {
             return res.status(400).json({ error: 'Validation error', details: identityValidation.error || businessDescriptionValidation.error || servicesValidation.error });
       }
 
@@ -40,13 +78,30 @@ const createAdvertiser = async (req, res) => {
       if (existingPhoneBuilder) {
             return res.status(400).json({ error: 'Validation error', details: 'Phone number already exists' });
       }
-
+    
       // Access uploaded files via req.files
       let profilePictureData;
-      let profilePictureContentType;
-      if (req.files && req.files.length > 0) {
-        profilePictureData = req.files[0].buffer;
-        profilePictureContentType = req.files[0].mimetype;
+      let serviceWithUploadedImage;
+      if (req.files) {
+        if(req.files?.profilePicture.length) {
+          profilePictureData = await uploadObject(req.files.profilePicture[0])
+        }
+      
+        if(req.body?.services?.length && req.files?.serviceImages) {
+          const completeServiceObjs = req.body.services.map((service) => {
+            const serviceImage = req.files?.serviceImages.find((image) => image.originalname === service.imageName)
+            if(serviceImage) return {...service, serviceImage}
+            else return service
+          })
+
+          serviceWithUploadedImage = await Promise.all(completeServiceObjs.map(async (service) => {
+            if(service.serviceImage) {
+              const imageObj = await uploadObject(service.serviceImage)
+              return {...service, serviceImage: imageObj}
+            }
+            return service
+          }))
+        }
       }
 
       // Create advertiser
@@ -56,19 +111,18 @@ const createAdvertiser = async (req, res) => {
           ...req.body.identity,
           // Add profilePicture field
           profilePicture: profilePictureData ? {
-            data: profilePictureData,
-            contentType: profilePictureContentType,
+            url: profilePictureData.url,
+            name: profilePictureData.name,
           } : undefined,
         },
         businessDescription: req.body.businessDescription,
-        services: req.body.services
+        services: serviceWithUploadedImage
       };
-
       
       const newAdvertiser = await advertiserService.createAdvertiser(advertiserData);
 
       // Update user's role to "builder"
-      await User.findByIdAndUpdate(user._id, { role: 'advertiser' });
+      await User.findByIdAndUpdate(user._id, { role: 'advertiser', isCompletedProfile: true });
 
       res.status(201).json(newAdvertiser);
     });

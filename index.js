@@ -86,12 +86,12 @@ app.use('/api', userRoutes);
 app.use('/api', adminRoutes);
 
 // account setup routes
-app.use('/builders', builderRoutes);
-app.use('/hirers', hirerRoutes);
-app.use('/advertisers', advertiserRoutes);
+app.use('/api/builders', builderRoutes);
+app.use('/api/hirers', hirerRoutes);
+app.use('/api/advertisers', advertiserRoutes);
 
 //user payment route
-app.use('/user', paymentRoute);
+app.use('/api/user', paymentRoute);
 
 
 const PORT = process.env.PORT || 3000;
