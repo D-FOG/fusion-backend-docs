@@ -13,7 +13,7 @@ const {
   signinWithGoogle,
   checkUsername
 } = require('../controllers/auth.controller');
-const { friendRequest } = require('../controllers/friend.controller');
+// const { friendRequest } = require('../controllers/messageRequest.controller');
 
 router.route('/check-username').post(checkUsername);
 router.route('/register').post(register);
@@ -22,7 +22,7 @@ router.route('/sign-with-google').post(signinWithGoogle);
 router.route('/email').post(email);
 router.route('/verifyotp').post(verifyOtp);
 router.route('/getuser').post(getUser);
-router.route('/request').post(friendRequest);
+
 router.route('/forgot-password').post(forgotPassword);
 router.route('/reset-password').post(resetPassword);
 router.route('/verify-urlcode').post(verifyurlcode);

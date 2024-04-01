@@ -3,8 +3,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const redis = require('../config/redis');
 
-const Friend = require('../models/Friend');
-
 const short = require('short-uuid');
 
 const { sendVerificationEmail, sendForgerPasswordMail } = require('../utils');
@@ -59,9 +57,7 @@ exports.register = async (req, res) => {
       referedBy: rrr?.username || null,
       ref: lowerUsername
     });
-    await Friend.create({
-      user: newUser
-    });
+
     const { username: newUsername, email: newEmail, date, ref } = newUser;
     res.status(200).json({
       message: 'User created successfully',
@@ -87,7 +83,11 @@ exports.login = async (req, res) => {
         isGoogleSignin: false
       });
       if (emailUser2) {
-        return res.status(401).json({ message: 'Verify your account', code: errorCodes.auth.verifyOTP, email: emailUser2.email });
+        return res.status(401).json({
+          message: 'Verify your account',
+          code: errorCodes.auth.verifyOTP,
+          email: emailUser2.email
+        });
       }
       const identifierUser = await User.findOne({ email: loweridentifier });
       if (!identifierUser) {
@@ -104,14 +104,8 @@ exports.login = async (req, res) => {
           .status(401)
           .json({ message: 'Invalid identifier or password' });
       }
-      const {
-        username,
-        email,
-        date,
-        ref,
-        referredUsers,
-        isCompletedProfile
-      } = identifierUser;
+      const { username, email, date, ref, referredUsers, isCompletedProfile } =
+        identifierUser;
       const authToken = jwt.sign({ identifier }, process.env.SECRET_KEY, {
         expiresIn: '24hr'
       });
@@ -136,7 +130,11 @@ exports.login = async (req, res) => {
       });
 
       if (user2) {
-        return res.status(401).json({ message: 'Verify your account', code: errorCodes.auth.verifyOTP, email: user2.email });
+        return res.status(401).json({
+          message: 'Verify your account',
+          code: errorCodes.auth.verifyOTP,
+          email: user2.email
+        });
       }
       const identifierUser = await User.findOne({ username: loweridentifier });
       if (!identifierUser) {
@@ -153,14 +151,8 @@ exports.login = async (req, res) => {
           .status(401)
           .json({ message: 'Invalid username or password' });
       }
-      const {
-        username,
-        email,
-        date,
-        ref,
-        isCompletedProfile,
-        referredUsers
-      } = identifierUser;
+      const { username, email, date, ref, isCompletedProfile, referredUsers } =
+        identifierUser;
       const authToken = jwt.sign({ identifier }, process.env.SECRET_KEY, {
         expiresIn: '24hr'
       });
@@ -243,17 +235,22 @@ exports.verifyOtp = async (req, res) => {
           ref,
           referredUsers
         } = user;
-        const authToken = jwt.sign(
-          { id: _id },
-          process.env.SECRET_KEY,
-          {
-            expiresIn: '24hr'
+        const authToken = jwt.sign({ id: _id }, process.env.SECRET_KEY, {
+          expiresIn: '24hr'
+        });
+        res.status(200).json({
+          success: true,
+          message: 'OTP verified',
+          result: {
+            _id,
+            authToken,
+            username,
+            email,
+            ref,
+            referredUsers,
+            isCompletedProfile,
+            date
           }
-        ); 
-        res.status(200).json({ 
-          success: true, 
-          message: 'OTP verified', 
-          result: {authToken, username, email, ref, referredUsers, isCompletedProfile, date} 
         });
       } else {
         res.status(400).json({ success: false, message: 'OTP not verified' });
@@ -396,6 +393,7 @@ exports.verifyurlcode = async (req, res) => {
   }
   return res.status(200).json({ message: 'Valid url' });
 };
+
 const { OAuth2Client } = require('google-auth-library');
 const errorCodes = require('../utils/errorCodes');
 const client = new OAuth2Client();
@@ -500,14 +498,16 @@ exports.signinWithGoogle = async (req, res) => {
 
 exports.checkUsername = async (req, res) => {
   try {
-    const {username} = req.body
-    if(!username) return res.status(422).json({message: 'Username should be provided'})
+    const { username } = req.body;
+    if (!username)
+      return res.status(422).json({ message: 'Username should be provided' });
 
-    const user = await User.findOne({username})
-    if(user) return res.status(409).json({message: 'Username already exists'})  
-    
-    return res.status(200).json({message: 'ok'})
-  }catch(err) {
-    res.status(500).json('Internal server error')
+    const user = await User.findOne({ username });
+    if (user)
+      return res.status(409).json({ message: 'Username already exists' });
+
+    return res.status(200).json({ message: 'ok' });
+  } catch (err) {
+    res.status(500).json('Internal server error');
   }
-}
+};
