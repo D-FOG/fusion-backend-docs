@@ -16,6 +16,7 @@ const hirerRoutes = require('./routes/hirerRoutes');
 const advertiserRoutes = require('./routes/advertiserRoutes');
 const paymentRoute = require('./routes/paymentRoute');
 const chatRoute = require('./routes/chat.route');
+const referral = require('./routes/referral');
 
 dotenv.config(); // Load environment variables from .env file
 
@@ -93,6 +94,7 @@ app.use('/api/advertisers', advertiserRoutes);
 app.use('/api/chat', chatRoute);
 //user payment route
 app.use('/api/user', paymentRoute);
+app.use('/api/referral', referral);
 
 const PORT = process.env.PORT || 3000;
 
