@@ -48,24 +48,15 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  ref: {
-    type: String,
-    required: false
-  },
-  referredUsers: {
-    type: Array,
-    default: []
-  },
   referedBy: {
-    type: String,
-    required: false
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   isGoogleSignin: {
     type: Boolean,
     default: false,
     required: false
   },
-
   role: {
     type: String,
     enum: ['user', 'builder', 'hirer', 'advertiser'], // Add other roles as needed

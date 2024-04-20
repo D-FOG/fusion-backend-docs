@@ -2,10 +2,20 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const redis = require('../config/redis');
-
 const short = require('short-uuid');
+const ReferralTree = require('../models/ReferralTree');
 
 const { sendVerificationEmail, sendForgerPasswordMail } = require('../utils');
+
+const addReferee = async (referrerId, refereeId) => {
+  const referralTree = await ReferralTree.findOne({userId: referrerId, $expr: { $lt: [{ $size: '$referredUsers' }, 5] } })
+  if(referralTree) {
+    referralTree.referredUsers = [...referralTree.referredUsers, refereeId]
+    return referralTree.save()
+  }else {
+    return ReferralTree.create({userId: referrerId, referredUsers: [refereeId]})
+  }
+}
 
 exports.register = async (req, res) => {
   const { username, email, password, refd } = req.body;
@@ -32,36 +42,30 @@ exports.register = async (req, res) => {
     }
     const lowerRefd = refd ? refd.toLowerCase() : null;
     if (lowerRefd) {
-      const checkRef = await User.findOne({ ref: lowerRefd });
+      const checkRef = await User.findOne({ username: lowerRefd });
       if (!checkRef) {
         return res.status(400).json({ message: 'Invalid referral code' });
       }
-      await User.findOneAndUpdate(
-        { username: checkRef.username },
-        { referredUsers: [...checkRef.referredUsers, lowerUsername] }
-      );
     }
-
     if (password.length < 6) {
       return res
         .status(400)
         .json({ message: 'Length of password is less than 6' });
     }
     const newPassword = await bcrypt.hash(password, 12);
-    const rrr = await User.findOne({ ref: lowerRefd });
+    const referrer = await User.findOne({ username: lowerRefd });
     const newUser = await User.create({
       username: lowerUsername,
       email: lowerEmail,
       password: newPassword,
       isCompleted: false,
-      referedBy: rrr?.username || null,
-      ref: lowerUsername
+      referedBy: referrer?._id || null,
     });
-
-    const { username: newUsername, email: newEmail, date, ref } = newUser;
+    await addReferee(referrer.id, newUser._id)
+    const { username: newUsername, email: newEmail, date } = newUser;
     res.status(200).json({
       message: 'User created successfully',
-      result: { username: newUsername, email: newEmail, date, ref }
+      result: { username: newUsername, email: newEmail, date }
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -106,7 +110,7 @@ exports.login = async (req, res) => {
       }
       const { username, email, date, ref, referredUsers, isCompletedProfile } =
         identifierUser;
-      const authToken = jwt.sign({ identifier }, process.env.SECRET_KEY, {
+      const authToken = jwt.sign({ userId: identifierUser._id }, process.env.SECRET_KEY, {
         expiresIn: '24hr'
       });
       return res.status(200).json({
@@ -153,7 +157,7 @@ exports.login = async (req, res) => {
       }
       const { username, email, date, ref, isCompletedProfile, referredUsers } =
         identifierUser;
-      const authToken = jwt.sign({ identifier }, process.env.SECRET_KEY, {
+      const authToken = jwt.sign({ userId: identifierUser._id }, process.env.SECRET_KEY, {
         expiresIn: '24hr'
       });
       return res.status(200).json({
