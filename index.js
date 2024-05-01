@@ -40,22 +40,22 @@ mongoose
     console.error('Error connecting to database:', err);
   });
 
-const redis = require('./config/redis');
+// const redis = require('./config/redis');
 
-const createRedisConnection = async () => {
-  return new Promise((resolve, reject) => {
-    redis.on('connect', () => {
-      console.log('Connected to redis server');
-      resolve(true);
-    });
-    redis.on('error', error => {
-      console.log('error connecting to redis');
-      reject(error);
-    });
-  });
-};
+// const createRedisConnection = async () => {
+//   return new Promise((resolve, reject) => {
+//     redis.on('connect', () => {
+//       console.log('Connected to redis server');
+//       resolve(true);
+//     });
+//     redis.on('error', error => {
+//       console.log('error connecting to redis');
+//       reject(error);
+//     });
+//   });
+// };
 
-createRedisConnection();
+// createRedisConnection();
 
 app.use(cors());
 
@@ -67,16 +67,18 @@ const options = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Fusion Api',
+      title: 'Account setup API Documentation',
       version: '1.0.0',
-      description: 'Fusion website'
-    }
+      description: 'API documentation for fusion account setup',
+    },
   },
-  apis: ['./routes/*.js']
+  apis: ['./routes/*.js'],
 };
 
+const specs = swaggerJsdoc(options);
+
 const swaggerSpec = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Fusion api, check the docs 👉👉👉 !');

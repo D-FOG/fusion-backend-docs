@@ -81,98 +81,158 @@ const advertiserController = require('../controllers/advertiserController');
 
 /**
  * @swagger
- * /advertisers:
- *   post:
- *     summary: Create a new advertiser
- *     tags: [Advertisers]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/AdvertiserInput'
- *     responses:
- *       '201':
- *         description: Advertiser created successfully
- *         content:
- *           application/json:
- *             example:
- *               _id: '12345'
- *               identity: {...}
- *               businessDescription: {...}
- *               services: [{...}, {...}]
- *       '400':
- *         description: Validation error
- *         content:
- *           application/json:
- *             example:
- *               error: Validation error
- *               details: {...}
- *       '500':
- *         description: Internal server error
- *         content:
- *           application/json:
- *             example:
- *               error: Internal server error
- */
-
-
-/**
+*   /api/advertisers:
+*     post:
+*       summary: Create a new advertiser
+*       tags:
+*         - Advertisers
+*       requestBody:
+*         required: true
+*         content:
+*           application/json:
+*             schema:
+*               $ref: "#/components/schemas/AdvertiserInput"
+*       responses:
+*         201:
+*           description: Advertiser created successfully
+*           content:
+*             application/json:
+*               example:
+*                 _id: "12345"
+*                 identity:
+*                   profilePicture: "https://example.com/profile.jpg"
+*                   firstName: "John"
+*                   lastName: "Doe"
+*                   email: "john@example.com"
+*                   phoneNumber: "1234567890"
+*                   description: "Lorem ipsum"
+*                   occupation: "Business Owner"
+*                   gender: "Male"
+*                   birthday: "1990-01-01"
+*                   address:
+*                     state: "California"
+*                     city: "Los Angeles"
+*                 businessDescription:
+*                   businessTitle: "Business Title"
+*                   businessDescription: "Business Description"
+*                 services:
+*                   - serviceTitle: "Service 1"
+*                     serviceDescription: "Service Description 1"
+*                     serviceImage: "https://example.com/service1.jpg"
+*                   - serviceTitle: "Service 2"
+*                     serviceDescription: "Service Description 2"
+*                     serviceImage: "https://example.com/service2.jpg"
+*         400:
+*           description: Validation error
+*           content:
+*             application/json:
+*               example:
+*                 error: "Validation error"
+*                 details: "Invalid input data"
+*         500:
+*           description: Internal server error
+*           content:
+*             application/json:
+*               example:
+*                 error: "Internal server error"
+* @swagger
+*   /api/advertisers/{id}:
+*     get:
+*       summary: Get advertiser by ID
+*       tags:
+*         - Advertisers
+*       parameters:
+*         - in: path
+*           name: id
+*           required: true
+*           description: Advertiser ID
+*           schema:
+*             type: string
+*       responses:
+*         200:
+*           description: Advertiser retrieved successfully
+*           content:
+*             application/json:
+*               example:
+*                 _id: "12345"
+*                 identity:
+*                   profilePicture: "https://example.com/profile.jpg"
+*                   firstName: "John"
+*                   lastName: "Doe"
+*                   email: "john@example.com"
+*                   phoneNumber: "1234567890"
+*                   description: "Lorem ipsum"
+*                   occupation: "Business Owner"
+*                   gender: "Male"
+*                   birthday: "1990-01-01"
+*                   address:
+*                     state: "California"
+*                     city: "Los Angeles"
+*                 businessDescription:
+*                   businessTitle: "Business Title"
+*                   businessDescription: "Business Description"
+*                 services:
+*                   - serviceTitle: "Service 1"
+*                     serviceDescription: "Service Description 1"
+*                     serviceImage: "https://example.com/service1.jpg"
+*                   - serviceTitle: "Service 2"
+*                     serviceDescription: "Service Description 2"
+*                     serviceImage: "https://example.com/service2.jpg"
+*         404:
+*           description: Advertiser not found
+*           content:
+*             application/json:
+*               example:
+*                 error: "Advertiser not found"
+*         500:
+*           description: Internal server error
+*           content:
+*             application/json:
+*               example:
+*                 error: "Internal server error"
  * @swagger
- * /advertisers/{id}:
- *   get:
- *     summary: Get advertiser by ID
- *     tags: [Advertisers]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: Advertiser ID
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Advertiser retrieved successfully
- *         content:
- *           application/json:
- *             example:
- *               _id: 12345
- *               identity: {...}
- *               businessDescription: {...}
- *               services: [{...}, {...}]
- *       404:
- *         description: Advertiser not found
- *         content:
- *           application/json:
- *             example:
- *               error: Advertiser not found
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             example:
- *               error: Internal server error
- */
-
-/**
- * @swagger
- * /advertisers:
- *   get:
- *     summary: Get all advertisers
- *     tags: [Advertisers]
- *     responses:
- *       200:
- *         description: Advertisers retrieved successfully
- *         content:
- *           application/json:
- *             example: [{...}, {...}]
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             example:
- *               error: Internal server error
- */
+*   /api/advertisers:
+*     get:
+*       summary: Get all advertisers
+*       tags:
+*         - Advertisers
+*       responses:
+*         200:
+*           description: Advertisers retrieved successfully
+*           content:
+*             application/json:
+*               example:
+*                 _id: "6123465aeed368001c49f875"
+*                 identity:
+*                   profilePicture: "https://example.com/profile.jpg"
+*                   firstName: "John"
+*                   lastName: "Doe"
+*                   email: "john@example.com"
+*                   phoneNumber: "1234567890"
+*                   description: "Lorem ipsum"
+*                   occupation: "Business Owner"
+*                   gender: "Male"
+*                   birthday: "1990-01-01"
+*                   address:
+*                     state: "California"
+*                     city: "Los Angeles"
+*                 businessDescription:
+*                   businessTitle: "Business Title"
+*                   businessDescription: "Business Description"
+*                 services:
+*                   - serviceTitle: "Service 1"
+*                     serviceDescription: "Service Description 1"
+*                     serviceImage: "https://example.com/service1.jpg"
+*                   - serviceTitle: "Service 2"
+*                     serviceDescription: "Service Description 2"
+*                     serviceImage: "https://example.com/service2.jpg"
+*         500:
+*           description: Internal server error
+*           content:
+*             application/json:
+*               example:
+*                 error: "Internal server error"
+*/
 
 // Create Advertiser
 router.post('/', advertiserController.createAdvertiser);
