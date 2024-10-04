@@ -81,7 +81,7 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.get('/', (req, res) => {
-  res.send('Welcome to the Fusion api, check the docs 👉👉👉 !');
+  res.send('Welcome to the Fusion api, check the docs 👉👉👉 https://documenter.getpostman.com/view/24619744/2sAXjT19Q4 !!');
 });
 
 // Routes
